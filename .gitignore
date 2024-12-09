@@ -1,0 +1,8 @@
+/.*.cache
+/.idea
+/composer.lock
+/infection
+/log
+/tmp
+/vendor
+*~

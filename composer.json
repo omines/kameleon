@@ -1,0 +1,57 @@
+{
+  "name": "omines/kameleon",
+  "type": "library",
+  "description": "KML Reader and Writer library for Google Maps/Earth",
+  "keywords": ["kml", "kmz", "google maps", "google earth"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jeroen van den Broek",
+      "email": "niels.keurentjes@omines.com",
+      "homepage": "https://www.omines.nl/",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/omines/kameleon/issues"
+  },
+  "require": {
+    "php": ">=8.1",
+    "ext-xml": "*",
+    "ext-simplexml": "*",
+    "ext-zip": "*"
+  },
+  "require-dev": {
+    "ekino/phpstan-banned-code": "^v2.1.0",
+    "friendsofphp/php-cs-fixer": "^v3.65.0",
+    "infection/infection": "^0.29.8",
+    "phpstan/extension-installer": "^1.4.3",
+    "phpstan/phpstan": "^1.12.12",
+    "phpstan/phpstan-phpunit": "^1.4.1",
+    "phpunit/phpunit": "^11.4.4"
+  },
+  "conflict": {
+  },
+  "autoload": {
+    "psr-4": { "Omines\\Kameleon\\": "src/"}
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "audit": {"abandoned": "fail"},
+    "allow-plugins": {
+      "infection/extension-installer": true,
+      "phpstan/extension-installer": true
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1-dev"
+    }
+  }
+}
