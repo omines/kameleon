@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <build time="Mon Dec 9 18:17:11 UTC 2024" phpunit="11.5.0" coverage="11.0.7">
+    <runtime name="PHP" version="8.3.10" url="https://www.php.net/"/>
+    <driver name="xdebug" version="3.3.2"/>
+  </build>
+  <project source="/var/www/html/kameleon/src">
+    <tests/>
+    <directory name="/">
+      <totals>
+        <lines total="582" comments="79" code="503" executable="131" executed="0" percent="0.00"/>
+        <methods count="49" tested="0" percent="0.00"/>
+        <functions count="0" tested="0" percent="0"/>
+        <classes count="8" tested="0" percent="0.00"/>
+        <traits count="0" tested="0" percent="0"/>
+      </totals>
+      <directory name="Exception">
+        <totals>
+          <lines total="36" comments="14" code="22" executable="0" executed="0" percent="0"/>
+          <methods count="0" tested="0" percent="0"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="0" tested="0" percent="0"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="InvalidArchiveException.php" href="Exception/InvalidArchiveException.php.xml">
+          <totals>
+            <lines total="18" comments="7" code="11" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="InvalidFileException.php" href="Exception/InvalidFileException.php.xml">
+          <totals>
+            <lines total="18" comments="7" code="11" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Model">
+        <totals>
+          <lines total="461" comments="54" code="407" executable="101" executed="0" percent="0.00"/>
+          <methods count="47" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="7" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <directory name="Node">
+          <totals>
+            <lines total="194" comments="23" code="171" executable="45" executed="0" percent="0.00"/>
+            <methods count="19" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="3" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+          <file name="KmlNode.php" href="Model/Node/KmlNode.php.xml">
+            <totals>
+              <lines total="42" comments="7" code="35" executable="9" executed="0" percent="0.00"/>
+              <methods count="4" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="StyleMapNode.php" href="Model/Node/StyleMapNode.php.xml">
+            <totals>
+              <lines total="70" comments="9" code="61" executable="14" executed="0" percent="0.00"/>
+              <methods count="8" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="StyleNode.php" href="Model/Node/StyleNode.php.xml">
+            <totals>
+              <lines total="82" comments="7" code="75" executable="22" executed="0" percent="0.00"/>
+              <methods count="7" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+        </directory>
+        <directory name="Style">
+          <totals>
+            <lines total="178" comments="21" code="157" executable="39" executed="0" percent="0.00"/>
+            <methods count="18" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="3" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+          <file name="BalloonStyle.php" href="Model/Style/BalloonStyle.php.xml">
+            <totals>
+              <lines total="44" comments="7" code="37" executable="8" executed="0" percent="0.00"/>
+              <methods count="4" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="LineStyle.php" href="Model/Style/LineStyle.php.xml">
+            <totals>
+              <lines total="59" comments="7" code="52" executable="13" executed="0" percent="0.00"/>
+              <methods count="6" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="PolyStyle.php" href="Model/Style/PolyStyle.php.xml">
+            <totals>
+              <lines total="75" comments="7" code="68" executable="18" executed="0" percent="0.00"/>
+              <methods count="8" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+        </directory>
+        <file name="KmlDocument.php" href="Model/KmlDocument.php.xml">
+          <totals>
+            <lines total="89" comments="10" code="79" executable="17" executed="0" percent="0.00"/>
+            <methods count="10" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Reader">
+        <totals>
+          <lines total="85" comments="11" code="74" executable="30" executed="0" percent="0.00"/>
+          <methods count="2" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="1" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="KmzReader.php" href="Reader/KmzReader.php.xml">
+          <totals>
+            <lines total="85" comments="11" code="74" executable="30" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+    </directory>
+  </project>
+</phpunit>

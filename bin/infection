@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+cd $(dirname $0)/..
+
+export APP_ENV=test
+export APP_DEBUG=1
+export XDEBUG_MODE=coverage
+
+vendor/bin/infection --threads=max $@
