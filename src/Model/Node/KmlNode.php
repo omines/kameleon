@@ -35,6 +35,7 @@ abstract class KmlNode
         return match (mb_strtolower($node->getName())) {
             'style' => StyleNode::fromSimpleXmlElement($node),
             'stylemap' => StyleMapNode::fromSimpleXmlElement($node),
+            'placemark' => PlacemarkNode::fromSimpleXmlElement($node),
             default => null,
         };
     }
