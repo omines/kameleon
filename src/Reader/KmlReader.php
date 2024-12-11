@@ -17,7 +17,7 @@ use Omines\Kameleon\Exception\InvalidFileException;
 use Omines\Kameleon\Model\KmlDocument;
 use Omines\Kameleon\Model\Node\KmlNode;
 
-class KmzReader
+class KmlReader
 {
     /**
      * @throws InvalidFileException     If the file does not exist or is not a valid KML file
@@ -45,7 +45,9 @@ class KmzReader
                 throw new InvalidFileException(sprintf('Invalid file "%s" provided', $fileName));
             }
         } finally {
-            $zip->close();
+            if (true === $openResult) {
+                $zip->close();
+            }
         }
 
         if (empty($document)) {

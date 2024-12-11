@@ -63,4 +63,9 @@ class Coordinate
 
         return new self((float) $parts[1], (float) $parts[0], isset($parts[2]) ? (float) $parts[2] : 0);
     }
+
+    public function toString(): string
+    {
+        return sprintf('%f,%f,%f', $this->longitude, $this->latitude, $this->altitude);
+    }
 }

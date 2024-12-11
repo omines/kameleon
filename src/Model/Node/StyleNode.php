@@ -78,4 +78,49 @@ class StyleNode extends KmlNode
 
         return $style;
     }
+
+    public function appendTo(\DOMDocument $document, \DOMElement $parent): void
+    {
+        $styleElement = $document->createElement('Style');
+        if (null !== $this->getId()) {
+            $styleElement->setAttribute('id', $this->getId());
+        }
+        $parent->appendChild($styleElement);
+
+        if (null !== $this->getLineStyle()) {
+            $lineStyle = $document->createElement('LineStyle');
+            $styleElement->appendChild($lineStyle);
+
+            if (null !== $this->getLineStyle()->getColor()) {
+                $lineStyle->appendChild($document->createElement('Color', $this->getLineStyle()->getColor()));
+            }
+            if (null !== $this->getLineStyle()->getWidth()) {
+                $lineStyle->appendChild($document->createElement('Width', (string) $this->getLineStyle()->getWidth()));
+            }
+        }
+
+        if (null !== $this->getPolyStyle()) {
+            $polyStyle = $document->createElement('PolyStyle');
+            $styleElement->appendChild($polyStyle);
+
+            if (null !== $this->getPolyStyle()->getColor()) {
+                $polyStyle->appendChild($document->createElement('Color', $this->getPolyStyle()->getColor()));
+            }
+            if (null !== $this->getPolyStyle()->getFill()) {
+                $polyStyle->appendChild($document->createElement('fill', (string) $this->getPolyStyle()->getFill()));
+            }
+            if (null !== $this->getPolyStyle()->getOutline()) {
+                $polyStyle->appendChild($document->createElement('outline', (string) $this->getPolyStyle()->getOutline()));
+            }
+        }
+
+        if (null !== $this->getBalloonStyle()) {
+            $balloonStyle = $document->createElement('BalloonStyle');
+            $styleElement->appendChild($balloonStyle);
+
+            if (null !== $this->getBalloonStyle()->getText()) {
+                $balloonStyle->appendChild($document->createElement('text', $this->getBalloonStyle()->getText()));
+            }
+        }
+    }
 }

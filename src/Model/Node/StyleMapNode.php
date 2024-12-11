@@ -66,4 +66,21 @@ class StyleMapNode extends KmlNode
 
         return new self($node->id ? (string) $node->id : null, $pairs);
     }
+
+    public function appendTo(\DOMDocument $document, \DOMElement $parent): void
+    {
+        $styleMap = $document->createElement('StyleMap');
+        if (null !== $this->getId()) {
+            $styleMap->setAttribute('id', $this->getId());
+        }
+        $parent->appendChild($styleMap);
+
+        foreach ($this->pairs as $key => $value) {
+            $pair = $document->createElement('Pair');
+            $styleMap->appendChild($pair);
+
+            $pair->appendChild($document->createElement('key', $key));
+            $pair->appendChild($document->createElement('styleUrl', $value));
+        }
+    }
 }

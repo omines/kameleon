@@ -12,18 +12,18 @@ declare(strict_types=1);
 
 namespace Omines\Kameleon\Enum;
 
-enum AltitudeMode
+enum AltitudeMode: string
 {
-    case ABSOLUTE;
-    case CLAMP_TO_GROUND;
-    case RELATIVE_TO_GROUND;
+    case ABSOLUTE = 'absolute';
+    case CLAMP_TO_GROUND = 'clampToGround';
+    case RELATIVE_TO_GROUND = 'relativeToGround';
 
     public static function fromString(string $string): self
     {
         return match (mb_strtolower($string)) {
-            'absolute' => self::ABSOLUTE,
-            'clamptoground' => self::CLAMP_TO_GROUND,
-            'relativetoground' => self::RELATIVE_TO_GROUND,
+            mb_strtolower(self::ABSOLUTE->value) => self::ABSOLUTE,
+            mb_strtolower(self::CLAMP_TO_GROUND->value) => self::CLAMP_TO_GROUND,
+            mb_strtolower(self::RELATIVE_TO_GROUND->value) => self::RELATIVE_TO_GROUND,
             default => throw new \InvalidArgumentException("Invalid altitude mode: $string"),
         };
     }

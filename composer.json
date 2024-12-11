@@ -19,7 +19,8 @@
     "php": ">=8.1",
     "ext-xml": "*",
     "ext-simplexml": "*",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "ext-dom": "*"
   },
   "require-dev": {
     "ekino/phpstan-banned-code": "^v2.1.0",

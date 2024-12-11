@@ -39,4 +39,6 @@ abstract class KmlNode
             default => null,
         };
     }
+
+    abstract public function appendTo(\DOMDocument $document, \DOMElement $parent): void;
 }

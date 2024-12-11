@@ -114,4 +114,9 @@ class Polygon
 
         return $this;
     }
+
+    public function getCoordinatesAsString(): string
+    {
+        return implode("\n", array_map(fn (Coordinate $coordinate) => $coordinate->toString(), $this->coordinates));
+    }
 }
