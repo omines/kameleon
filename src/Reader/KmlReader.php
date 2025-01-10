@@ -23,7 +23,7 @@ class KmlReader
      * @throws InvalidFileException     If the file does not exist or is not a valid KML file
      * @throws InvalidArchiveException  If an archive is provided, but it does not contain a KML file named "doc.kml"
      */
-    public function read(string $fileName): ?KmlDocument
+    public function readFromFile(string $fileName): ?KmlDocument
     {
         if (!file_exists($fileName) || !is_file($fileName)) {
             throw new InvalidFileException(sprintf('Invalid file "%s" provided', $fileName));
@@ -60,9 +60,22 @@ class KmlReader
         );
     }
 
+    /**
+     * @throws InvalidFileException If the provided document is not a valid KML file
+     */
+    public function readFromString(string $document, string $fileName): ?KmlDocument
+    {
+        return $this->parseDocument($document, $fileName);
+    }
+
     private function parseDocument(string $document, string $fileName): KmlDocument
     {
         try {
+            // Attempting to parse invalid XML will throw a warning, we want to propagate that as an exception instead
+            set_error_handler(function ($severity, $message, $file, $line) {
+                throw new \ErrorException($message, 0, $severity, $file, $line);
+            });
+
             $xml = new \SimpleXMLElement($document);
             $document = new KmlDocument($fileName);
 
@@ -79,6 +92,9 @@ class KmlReader
             }
         } catch (\Throwable $e) {
             throw new InvalidFileException('KML format is invalid');
+        } finally {
+            // Make sure we always restore the error handler as long as set_error_handler is needed above
+            restore_error_handler();
         }
 
         return $document;
