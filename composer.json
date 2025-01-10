@@ -17,10 +17,10 @@
   },
   "require": {
     "php": ">=8.2",
-    "ext-xml": "*",
+    "ext-dom": "*",
     "ext-simplexml": "*",
-    "ext-zip": "*",
-    "ext-dom": "*"
+    "ext-xml": "*",
+    "ext-zip": "*"
   },
   "require-dev": {
     "ekino/phpstan-banned-code": "^v2.1.0",
