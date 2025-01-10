@@ -29,9 +29,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Psalm Security Scan
-        uses: docker://ghcr.io/psalm/psalm-security-scan
+      - name: Psalm
+        uses: docker://ghcr.io/psalm/psalm-github-actions
         with:
+          composer_require_dev: true
           composer_ignore_platform_reqs: true
 
       - name: Upload Security Analysis results to GitHub
