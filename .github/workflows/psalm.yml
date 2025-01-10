@@ -32,7 +32,7 @@ jobs:
       - name: Psalm Security Scan
         uses: docker://ghcr.io/psalm/psalm-security-scan
         with:
-          composer_ignore_platform_reqs: false
+          extensions: dom, simplexml, xml, zip
 
       - name: Upload Security Analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v3
