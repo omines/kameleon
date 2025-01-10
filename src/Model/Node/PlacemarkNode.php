@@ -146,6 +146,11 @@ class PlacemarkNode extends KmlNode
         return $this;
     }
 
+    public function getExtendedDataValue(string $key): ?string
+    {
+        return $this->extendedData[$key] ?? null;
+    }
+
     public static function fromSimpleXmlElement(\SimpleXMLElement $node): ?self
     {
         $placemarkNode = new self($node->attributes()->id ? (string) $node->attributes()->id : null);
@@ -173,7 +178,7 @@ class PlacemarkNode extends KmlNode
                     }
                     break;
                 case 'point':
-                    $coordinates = explode(',', (string) $child->Point->coordinates);
+                    $coordinates = explode(',', (string) $child->coordinates);
                     if (count($coordinates) < 2) {
                         throw new \InvalidArgumentException('Invalid coordinate string');
                     }
@@ -183,6 +188,17 @@ class PlacemarkNode extends KmlNode
                         isset($coordinates[2]) ? (float) $coordinates[2] : 0
                     );
                     $placemarkNode->setPoint($point);
+                    break;
+                case 'extendeddata':
+                    foreach ($child->children() as $data) {
+                        if ('Data' !== $data->getName()) {
+                            continue;
+                        }
+
+                        if ($data->attributes()?->name) {
+                            $placemarkNode->addExtendedData((string) $data->attributes()->name, (string) $data);
+                        }
+                    }
                     break;
             }
         }

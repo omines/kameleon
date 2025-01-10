@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Omines\Kameleon\Model\Style;
 
-class LineStyle
+class LabelStyle
 {
-    public function __construct(private ?string $color = null, private ?int $width = null)
+    public function __construct(private ?string $color = null, private int $scale = 1)
     {
     }
 
@@ -30,14 +30,14 @@ class LineStyle
         return $this;
     }
 
-    public function getWidth(): ?int
+    public function getScale(): int
     {
-        return $this->width;
+        return $this->scale;
     }
 
-    public function setWidth(?int $width): static
+    public function setScale(int $scale): static
     {
-        $this->width = $width;
+        $this->scale = $scale;
 
         return $this;
     }
@@ -45,12 +45,12 @@ class LineStyle
     public static function fromSimpleXmlElement(\SimpleXMLElement $node): ?self
     {
         $style = new self();
+
         if (isset($node->Color)) {
             $style->setColor((string) $node->Color);
         }
-
-        if (isset($node->width)) {
-            $style->setWidth((int) $node->width);
+        if (isset($node->scale)) {
+            $style->setScale((int) $node->scale);
         }
 
         return $style;
