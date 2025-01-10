@@ -1,5 +1,9 @@
 # KaMeLeon - PHP library for reading and writing KML and KMZ files
 
+## Work in progress!
+
+This library is currently under development and not yet ready for production use. Please check back later.
+
 ## Contributing
 
 Please see [CONTRIBUTING.md](https://github.com/omines/kameleon/blob/master/.github/CONTRIBUTING.md) for details.
