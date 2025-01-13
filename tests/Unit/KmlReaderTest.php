@@ -22,6 +22,22 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(KmlReader::class)]
 class KmlReaderTest extends TestCase
 {
+    public function testReadKmlFileExistsFailure(): void
+    {
+        $reader = new KmlReader();
+
+        $this->expectException(InvalidFileException::class);
+        $reader->readFromFile(__DIR__ . '/does_not_exist.kml');
+    }
+
+    public function testReadKmlFileIsFolderFailure(): void
+    {
+        $reader = new KmlReader();
+
+        $this->expectException(InvalidFileException::class);
+        $reader->readFromFile(__DIR__);
+    }
+
     public function testReadKmlStringFailure(): void
     {
         $reader = new KmlReader();
@@ -30,7 +46,15 @@ class KmlReaderTest extends TestCase
         $reader->readFromString('invalid', 'invalid.kml');
     }
 
-    public function testReadKmlFileFailure(): void
+    public function testReadKmlFileEmptyFailure(): void
+    {
+        $reader = new KmlReader();
+
+        $this->expectException(InvalidFileException::class);
+        $reader->readFromFile(__DIR__ . '/../Data/empty.kml');
+    }
+
+    public function testReadKmlFileInvalidFailure(): void
     {
         $reader = new KmlReader();
 
@@ -38,7 +62,7 @@ class KmlReaderTest extends TestCase
         $reader->readFromFile(__DIR__ . '/../Data/invalid.kml');
     }
 
-    public function testReadKmzFileFailure(): void
+    public function testReadKmzFileInvalidFailure(): void
     {
         $reader = new KmlReader();
 

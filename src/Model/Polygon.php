@@ -92,9 +92,12 @@ class Polygon
     public function removeCoordinate(Coordinate $coordinate): static
     {
         $key = array_search($coordinate, $this->coordinates, true);
-        if (false !== $key) {
-            unset($this->coordinates[$key]);
+
+        if (false === $key) {
+            throw new \InvalidArgumentException('Coordinate not found in polygon');
         }
+
+        unset($this->coordinates[$key]);
 
         return $this;
     }
@@ -103,10 +106,7 @@ class Polygon
     {
         $this->coordinates = [];
         $parts = preg_split('/\s+/', mb_trim($coordinates));
-
-        if (!is_array($parts)) {
-            throw new \InvalidArgumentException('Invalid coordinate string');
-        }
+        assert(is_array($parts));
 
         foreach ($parts as $part) {
             $this->coordinates[] = Coordinate::fromString($part);

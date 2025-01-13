@@ -16,41 +16,47 @@ use Omines\Kameleon\Exception\InvalidArchiveException;
 use Omines\Kameleon\Exception\InvalidFileException;
 use Omines\Kameleon\Model\KmlDocument;
 use Omines\Kameleon\Model\Node\KmlNode;
+use Omines\Kameleon\Util\ErrorToExceptionTransformer;
 
 class KmlReader
 {
     /**
      * @throws InvalidFileException     If the file does not exist or is not a valid KML file
      * @throws InvalidArchiveException  If an archive is provided, but it does not contain a KML file named "doc.kml"
+     * @throws \ErrorException      If the reader itself fails catastrophically
      */
     public function readFromFile(string $fileName): ?KmlDocument
     {
-        if (!file_exists($fileName) || !is_file($fileName)) {
-            throw new InvalidFileException(sprintf('Invalid file "%s" provided', $fileName));
-        }
+        //        if (!file_exists($fileName) || !is_file($fileName)) {
+        //            throw new InvalidFileException(sprintf('Invalid file "%s" provided', $fileName));
+        //        }
+        //
+        $document = ErrorToExceptionTransformer::run(function () use ($fileName): ?string {
+            $document = null;
+            $zip = new \ZipArchive();
+            $openResult = null;
+            try {
+                $openResult = $zip->open($fileName);
 
-        $zip = new \ZipArchive();
-        $openResult = $zip->open($fileName);
+                if (\ZipArchive::ER_NOZIP === $openResult) {
+                    $document = file_get_contents($fileName);
+                } elseif (true === $openResult) {
+                    $document = $zip->getFromName('doc.kml');
 
-        try {
-            if (\ZipArchive::ER_NOZIP === $openResult) {
-                $document = file_get_contents($fileName);
-            } elseif (true === $openResult) {
-                $document = $zip->getFromName('doc.kml');
-
-                if (false === $document) {
-                    throw new InvalidArchiveException(sprintf('No KML file found in KMZ archive "%s"', $fileName));
+                    if (false === $document) {
+                        throw new InvalidArchiveException(sprintf('No KML file found in KMZ archive "%s"', $fileName));
+                    }
                 }
-            } else {
-                throw new InvalidFileException(sprintf('Invalid file "%s" provided', $fileName));
+            } finally {
+                if (true === $openResult) {
+                    $zip->close();
+                }
             }
-        } finally {
-            if (true === $openResult) {
-                $zip->close();
-            }
-        }
 
-        if (empty($document)) {
+            return $document ?: null;
+        });
+
+        if (empty($document) || !is_string($document)) {
             throw new InvalidFileException('Empty KML/KMZ file provided');
         }
 
@@ -62,6 +68,7 @@ class KmlReader
 
     /**
      * @throws InvalidFileException If the provided document is not a valid KML file
+     * @throws \ErrorException      If the reader itself fails catastrophically
      */
     public function readFromString(string $document, string $fileName): ?KmlDocument
     {
@@ -71,32 +78,29 @@ class KmlReader
     private function parseDocument(string $document, string $fileName): KmlDocument
     {
         try {
-            // Attempting to parse invalid XML will throw a warning, we want to propagate that as an exception instead
-            set_error_handler(function ($severity, $message, $file, $line) {
-                throw new \ErrorException($message, 0, $severity, $file, $line);
-            });
+            $doc = ErrorToExceptionTransformer::run(function () use ($document, $fileName): KmlDocument {
+                $xml = new \SimpleXMLElement($document);
+                $doc = new KmlDocument($fileName);
 
-            $xml = new \SimpleXMLElement($document);
-            $document = new KmlDocument($fileName);
-
-            if (null !== $xml->attributes()->xmlns) {
-                $document->setXmlns((string) $xml->attributes()->xmlns);
-            }
-
-            foreach ($xml->Document->children() as $node) {
-                if ('name' === $node->getName()) {
-                    $document->setName((string) $node);
-                } elseif ($node = KmlNode::fromSimpleXmlElement($node)) {
-                    $document->addNode($node);
+                if (null !== ($namespace = $xml->getNamespaces()[''] ?? null)) {
+                    $doc->setXmlns((string) $namespace);
                 }
-            }
+
+                foreach ($xml->Document->children() as $node) {
+                    if ('name' === $node->getName()) {
+                        $doc->setName((string) $node);
+                    } elseif ($node = KmlNode::fromSimpleXmlElement($node)) {
+                        $doc->addNode($node);
+                    }
+                }
+
+                return $doc;
+            });
         } catch (\Throwable $e) {
             throw new InvalidFileException('KML format is invalid');
-        } finally {
-            // Make sure we always restore the error handler as long as set_error_handler is needed above
-            restore_error_handler();
         }
+        assert($doc instanceof KmlDocument);
 
-        return $document;
+        return $doc;
     }
 }

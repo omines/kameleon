@@ -28,6 +28,13 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(PlacemarkNode::class)]
 #[CoversClass(StyleMapNode::class)]
 #[CoversClass(StyleNode::class)]
+#[CoversClass(BalloonStyle::class)]
+#[CoversClass(IconStyle::class)]
+#[CoversClass(LabelStyle::class)]
+#[CoversClass(LineStyle::class)]
+#[CoversClass(PolyStyle::class)]
+#[CoversClass(Coordinate::class)]
+#[CoversClass(Polygon::class)]
 class KmlNodeTest extends TestCase
 {
     public function testGenericNode(): void
@@ -154,7 +161,7 @@ class KmlNodeTest extends TestCase
     public function testPlacemarkFactory(): void
     {
         $node = KmlNode::fromSimpleXmlElement(new SimpleXMLElement(<<<EOF
-<Placemark>
+<Placemark id="test">
     <Name>test-name</Name>
     <Description>test-description</Description>
     <StyleUrl>test-style-url</StyleUrl>
@@ -174,6 +181,7 @@ class KmlNodeTest extends TestCase
     </Polygon>
     <Polygon>
         <LineString>
+            <altitudeMode>clampToGround</altitudeMode>
             <coordinates>0,0 0,1 1,1 1,0 0,0</coordinates>
         </LineString>
     </Polygon>
@@ -182,6 +190,7 @@ class KmlNodeTest extends TestCase
     </Point>
     <ExtendedData>
         <Data name="test">value</Data>
+        <DifferentTag name="test">value</DifferentTag>
     </ExtendedData>
 </Placemark>
 EOF));
@@ -206,14 +215,14 @@ EOF));
         $xml = $dom->saveXML();
 
         $this->assertNotFalse($xml);
-        $this->assertStringContainsString('<Placemark>', $xml);
+        $this->assertStringContainsString('<Placemark id="test">', $xml);
         $this->assertStringContainsString('<name>test-name</name>', $xml);
     }
 
     public function testStyleFactory(): void
     {
         $node = KmlNode::fromSimpleXmlElement(new SimpleXMLElement(<<<EOF
-<Style>
+<Style id="test">
     <IconStyle>
         <Icon>
             <href>test</href>
@@ -274,7 +283,20 @@ EOF));
         $xml = $dom->saveXML();
 
         $this->assertNotFalse($xml);
-        $this->assertStringContainsString('<Style>', $xml);
+        $this->assertStringContainsString('<Style id="test">', $xml);
+    }
+
+    public function testBrokenIconNode(): void
+    {
+        $node = KmlNode::fromSimpleXmlElement(new SimpleXMLElement(<<<EOF
+<Style id="test">
+    <IconStyle>
+        <Invalid>0</Invalid>
+    </IconStyle>
+</Style>
+EOF));
+        $this->assertInstanceOf(StyleNode::class, $node);
+        $this->assertNull($node->getIconStyle());
     }
 
     public function testStyleMapFactory(): void
@@ -305,6 +327,76 @@ EOF));
 
         $this->assertNotFalse($xml);
         $this->assertStringContainsString('<StyleMap>', $xml);
+    }
+
+    public function testStyleMapFactoryFailure(): void
+    {
+        $node = KmlNode::fromSimpleXmlElement(new SimpleXMLElement(<<<EOF
+<StyleMap id="test">
+    <Pair>
+        <key>normal</key>
+        <styleUrl>#test1</styleUrl>
+    </Pair>
+    <Pair>
+        <key>highlight</key>
+        <styleUrl>#test2</styleUrl>
+    </Pair>
+</StyleMap>
+EOF));
+        $this->assertInstanceOf(StyleMapNode::class, $node);
+
+        $this->assertEquals('test', $node->getId());
+
+        $this->assertCount(2, $node->getPairs());
+        $this->assertEquals('#test1', $node->getPair('normal'));
+        $this->assertEquals('#test2', $node->getPair('highlight'));
+
+        $dom = new DOMDocument();
+        $documentElement = $dom->createElement('Document');
+        $node->appendTo($dom, $documentElement);
+        $dom->appendChild($documentElement);
+        $xml = $dom->saveXML();
+
+        $this->assertNotFalse($xml);
+        $this->assertStringContainsString('<StyleMap id="test">', $xml);
+    }
+
+    public function testBrokenPlacemarkFactory(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        KmlNode::fromSimpleXmlElement(new SimpleXMLElement(<<<EOF
+<Placemark>
+    <Name>test-name</Name>
+    <Description>test-description</Description>
+    <StyleUrl>test-style-url</StyleUrl>
+    <Polygon>
+        <outerBoundaryIs>
+            <LinearRing>
+                <coordinates>0,0 0,1 1,1 1,0 0,0</coordinates>
+            </LinearRing>
+        </outerBoundaryIs>
+    </Polygon>
+    <Polygon>
+        <innerBoundaryIs>
+            <LinearRing>
+                <coordinates>0,0 0,1 1,1 1,0 0,0</coordinates>
+            </LinearRing>
+        </innerBoundaryIs>
+    </Polygon>
+    <Polygon>
+        <LineString>
+            <altitudeMode>clampToGround</altitudeMode>
+            <coordinates>0,0 0,1 1,1 1,0 0,0</coordinates>
+        </LineString>
+    </Polygon>
+    <Point>
+        <coordinates>1,1,2</coordinates>
+    </Point>
+    <ExtendedData>
+        <Data name="test">value</Data>
+    </ExtendedData>
+</Placemark>
+EOF));
     }
 
     public function testInvalidFactory(): void

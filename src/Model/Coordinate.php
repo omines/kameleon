@@ -57,11 +57,11 @@ class Coordinate
     public static function fromString(string $string): self
     {
         $parts = explode(',', $string);
-        if (count($parts) < 2) {
+        if (count($parts) < 2 || count($parts) > 3) {
             throw new \InvalidArgumentException('Invalid coordinate string');
         }
 
-        return new self((float) $parts[1], (float) $parts[0], isset($parts[2]) ? (float) $parts[2] : 0);
+        return new self((float) $parts[0], (float) $parts[1], isset($parts[2]) ? (float) $parts[2] : 0);
     }
 
     public function toString(): string

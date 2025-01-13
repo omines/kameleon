@@ -55,5 +55,8 @@ class KmlDocumentTest extends TestCase
 
         $document->clearNodes();
         $this->assertCount(0, $document->getNodes());
+
+        $this->expectException(InvalidArgumentException::class);
+        $document->removeNode(new PlacemarkNode());
     }
 }

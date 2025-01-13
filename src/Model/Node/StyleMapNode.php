@@ -64,7 +64,7 @@ class StyleMapNode extends KmlNode
             $pairs[(string) $pair->key] = (string) $pair->styleUrl;
         }
 
-        return new self($node->id ? (string) $node->id : null, $pairs);
+        return new self($node->attributes()->id ? (string) $node->attributes()->id : null, $pairs);
     }
 
     public function appendTo(\DOMDocument $document, \DOMElement $parent): void

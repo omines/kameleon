@@ -67,9 +67,11 @@ class KmlDocument
     {
         $key = array_search($node, $this->nodes, true);
 
-        if (false !== $key) {
-            unset($this->nodes[$key]);
+        if (false === $key) {
+            throw new \InvalidArgumentException('Node not found in node list');
         }
+
+        unset($this->nodes[$key]);
 
         return $this;
     }

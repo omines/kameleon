@@ -51,19 +51,13 @@ class KmlWriter
 
         unlink($tempFile);
 
-        if (false === $zipContent) {
-            throw new InvalidArchiveException('Failed to write ZIP file');
-        }
-
-        return $zipContent;
+        return $zipContent ?: throw new InvalidArchiveException('Failed to write KMZ document');
     }
 
     public function streamKml(KmlDocument $document): void
     {
         $output = fopen('php://output', 'w');
-        if (false === $output) {
-            throw new \RuntimeException('Failed to open output stream');
-        }
+        assert(false !== $output);
 
         $doc = $this->writeKml($document);
 
@@ -77,9 +71,7 @@ class KmlWriter
     public function streamKmz(KmlDocument $document): void
     {
         $output = fopen('php://output', 'w');
-        if (false === $output) {
-            throw new \RuntimeException('Failed to open output stream');
-        }
+        assert(false !== $output);
 
         $doc = $this->writeKmz($document);
 

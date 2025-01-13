@@ -179,7 +179,7 @@ class PlacemarkNode extends KmlNode
                     break;
                 case 'point':
                     $coordinates = explode(',', (string) $child->coordinates);
-                    if (count($coordinates) < 2) {
+                    if (2 !== count($coordinates)) {
                         throw new \InvalidArgumentException('Invalid coordinate string');
                     }
                     $point = new Coordinate(
