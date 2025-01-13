@@ -105,7 +105,7 @@ class Polygon
     public function setCoordinatesFromString(string $coordinates): static
     {
         $this->coordinates = [];
-        $parts = preg_split('/\s+/', mb_trim($coordinates));
+        $parts = preg_split('/\s+/', trim($coordinates));
         assert(is_array($parts));
 
         foreach ($parts as $part) {
