@@ -58,29 +58,23 @@ class KmlWriter
 
     public function streamKml(KmlDocument $document): void
     {
-        /** @var resource $output */
-        $output = fopen('php://output', 'w');
-
-        $doc = $this->writeKml($document);
-
-        header('Content-Type: application/vnd.google-earth.kml+xml');
-        header('Content-Disposition: attachment; filename="doc.kml"');
-
-        fprintf($output, '%s', $doc);
-        fclose($output);
+        $this->stream($this->writeKml($document), 'application/vnd.google-earth.kml+xml', 'doc.kml');
     }
 
     public function streamKmz(KmlDocument $document): void
     {
+        $this->stream($this->writeKmz($document), 'application/vnd.google-earth.kmz', 'doc.kmz');
+    }
+
+    private function stream(string $content, string $contentType, string $filename): void
+    {
         /** @var resource $output */
         $output = fopen('php://output', 'w');
 
-        $doc = $this->writeKmz($document);
+        header(sprintf('Content-Type: %s', $contentType));
+        header(sprintf('Content-Disposition: attachment; filename="%s"', $filename));
 
-        header('Content-Type: application/vnd.google-earth.kmz');
-        header('Content-Disposition: attachment; filename="doc.kmz"');
-
-        fprintf($output, '%s', $doc);
+        fprintf($output, '%s', $content);
         fclose($output);
     }
 }
