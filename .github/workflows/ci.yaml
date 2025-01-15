@@ -73,8 +73,8 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-#      - name: Run infection tests
-#        run: vendor/bin/infection --threads=max
-#        if: ${{ matrix.dependencies == 'stable' && !matrix.experimental }}
-#        env:
-#          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_TOKEN }}
+      - name: Run infection tests
+        run: vendor/bin/infection --threads=max
+        if: ${{ matrix.dependencies == 'stable' && !matrix.experimental }}
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_TOKEN }}

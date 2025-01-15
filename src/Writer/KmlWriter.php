@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Omines\Kameleon\Writer;
 
-use Omines\Kameleon\Exception\InvalidArchiveException;
 use Omines\Kameleon\Model\KmlDocument;
 
 class KmlWriter
@@ -20,7 +19,6 @@ class KmlWriter
     public function writeKml(KmlDocument $document): string
     {
         $xml = new \DOMDocument('1.0', 'UTF-8');
-        $xml->formatOutput = true;
 
         $kml = $xml->createElement('kml');
         $kml->setAttribute('xmlns', $document->getXmlns());
@@ -33,7 +31,10 @@ class KmlWriter
             $node->appendTo($xml, $documentElement);
         }
 
-        return $xml->saveXML() ?: throw new \RuntimeException('Failed to write KML document');
+        $output = $xml->saveXML();
+        assert(is_string($output));
+
+        return $output;
     }
 
     public function writeKmz(KmlDocument $document): string
@@ -43,21 +44,22 @@ class KmlWriter
         $tempFile = tempnam(sys_get_temp_dir(), 'zip');
 
         $zip = new \ZipArchive();
-        $zip->open($tempFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->open($tempFile, \ZipArchive::CREATE);
         $zip->addFromString('doc.kml', $doc);
         $zip->close();
 
         $zipContent = file_get_contents($tempFile);
+        assert(is_string($zipContent));
 
         unlink($tempFile);
 
-        return $zipContent ?: throw new InvalidArchiveException('Failed to write KMZ document');
+        return $zipContent;
     }
 
     public function streamKml(KmlDocument $document): void
     {
+        /** @var resource $output */
         $output = fopen('php://output', 'w');
-        assert(false !== $output);
 
         $doc = $this->writeKml($document);
 
@@ -70,8 +72,8 @@ class KmlWriter
 
     public function streamKmz(KmlDocument $document): void
     {
+        /** @var resource $output */
         $output = fopen('php://output', 'w');
-        assert(false !== $output);
 
         $doc = $this->writeKmz($document);
 

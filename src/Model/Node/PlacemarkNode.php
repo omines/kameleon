@@ -168,25 +168,23 @@ class PlacemarkNode extends KmlNode
                     break;
                 case 'polygon':
                     if (isset($child->outerBoundaryIs->LinearRing)) {
-                        $placemarkNode->setOuterBoundary(self::buildPolygonFromLinearRing($child->outerBoundaryIs->LinearRing));
+                        $placemarkNode->setOuterBoundary(Polygon::buildFromLinearRing($child->outerBoundaryIs->LinearRing));
                     }
                     if (isset($child->innerBoundaryIs->LinearRing)) {
-                        $placemarkNode->setInnerBoundary(self::buildPolygonFromLinearRing($child->innerBoundaryIs->LinearRing));
+                        $placemarkNode->setInnerBoundary(Polygon::buildFromLinearRing($child->innerBoundaryIs->LinearRing));
                     }
                     if (isset($child->LineString)) {
-                        $placemarkNode->setLineString(self::buildPolygonFromLinearRing($child->LineString));
+                        $placemarkNode->setLineString(Polygon::buildFromLinearRing($child->LineString));
                     }
                     break;
                 case 'point':
                     $coordinates = explode(',', (string) $child->coordinates);
-                    if (2 !== count($coordinates)) {
+                    if (!in_array(count($coordinates), [2, 3], true)) {
                         throw new \InvalidArgumentException('Invalid coordinate string');
                     }
-                    $point = new Coordinate(
-                        (float) $coordinates[0],
-                        (float) $coordinates[1],
-                        isset($coordinates[2]) ? (float) $coordinates[2] : 0
-                    );
+                    array_walk($coordinates, fn (&$value) => $value = (float) $value);
+                    /** @var float[] $coordinates */
+                    $point = new Coordinate($coordinates[0], $coordinates[1], $coordinates[2] ?? 0);
                     $placemarkNode->setPoint($point);
                     break;
                 case 'extendeddata':
@@ -195,7 +193,7 @@ class PlacemarkNode extends KmlNode
                             continue;
                         }
 
-                        if ($data->attributes()?->name) {
+                        if ($data->attributes()->name) {
                             $placemarkNode->addExtendedData((string) $data->attributes()->name, (string) $data);
                         }
                     }
@@ -204,22 +202,6 @@ class PlacemarkNode extends KmlNode
         }
 
         return $placemarkNode;
-    }
-
-    private static function buildPolygonFromLinearRing(\SimpleXMLElement $ring): Polygon
-    {
-        $polygon = (new Polygon())
-            ->setExtrude(isset($ring->extrude) && $ring->extrude)
-            ->setTessellate(isset($ring->tessellate) && $ring->tessellate)
-        ;
-        if (isset($ring->altitudeMode)) {
-            $polygon->setAltitudeModeFromString((string) $ring->altitudeMode);
-        }
-        if (isset($ring->coordinates)) {
-            $polygon->setCoordinatesFromString((string) $ring->coordinates);
-        }
-
-        return $polygon;
     }
 
     public function appendTo(\DOMDocument $document, \DOMElement $parent): void
@@ -298,11 +280,9 @@ class PlacemarkNode extends KmlNode
             $placemark->appendChild($extendedData);
 
             foreach ($this->extendedData as $key => $value) {
-                $data = $document->createElement('Data');
+                $data = $document->createElement('Data', $value);
                 $data->setAttribute('name', $key);
                 $extendedData->appendChild($data);
-
-                $data->appendChild($document->createElement('value', $value));
             }
         }
     }

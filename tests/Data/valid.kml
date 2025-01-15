@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
+<kml xmlns="http://www.opengis.net/kml/2.1">
   <Document>
     <name>KML Samples</name>
-    <open>1</open>
+    <open>0</open>
     <description>Unleash your creativity with the help of these examples!</description>
     <Style id="downArrowIcon">
       <IconStyle>

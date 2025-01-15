@@ -11,10 +11,12 @@
 declare(strict_types=1);
 
 use Omines\Kameleon\Enum\AltitudeMode;
+use Omines\Kameleon\Enum\DisplayMode;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AltitudeMode::class)]
+#[CoversClass(DisplayMode::class)]
 class EnumTest extends TestCase
 {
     public function testAltitudeModes(): void
@@ -24,5 +26,13 @@ class EnumTest extends TestCase
         $this->assertEquals(AltitudeMode::ABSOLUTE, AltitudeMode::fromString('absolute'));
         $this->expectException(InvalidArgumentException::class);
         AltitudeMode::fromString('invalid');
+    }
+
+    public function testDisplayModes(): void
+    {
+        $this->assertEquals(DisplayMode::DEFAULT, DisplayMode::fromString('default'));
+        $this->assertEquals(DisplayMode::HIDE, DisplayMode::fromString('hide'));
+        $this->expectException(InvalidArgumentException::class);
+        DisplayMode::fromString('invalid');
     }
 }

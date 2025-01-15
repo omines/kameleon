@@ -12,6 +12,6 @@ declare(strict_types=1);
 
 namespace Omines\Kameleon\Exception;
 
-class InvalidFileException extends FileException
+class FileNotFoundException extends FileException
 {
 }

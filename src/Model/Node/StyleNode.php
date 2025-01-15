@@ -128,6 +128,9 @@ class StyleNode extends KmlNode
             if (null !== $this->getBalloonStyle()->getText()) {
                 $balloonStyle->appendChild($document->createElement('text', $this->getBalloonStyle()->getText()));
             }
+            if (null !== $this->getBalloonStyle()->getDisplayMode()) {
+                $balloonStyle->appendChild($document->createElement('displayMode', $this->getBalloonStyle()->getDisplayMode()->value));
+            }
         }
 
         if (null !== $this->getIconStyle()) {
@@ -138,10 +141,7 @@ class StyleNode extends KmlNode
                 $icon = $document->createElement('Icon');
                 $iconStyle->appendChild($icon);
 
-                if (null !== $this->getIconStyle()->getHref()) {
-                    $icon->appendChild($document->createElement('href', $this->getIconStyle()->getHref()));
-                }
-
+                $icon->appendChild($document->createElement('href', $this->getIconStyle()->getHref()));
                 $icon->appendChild($document->createElement('x', (string) $this->getIconStyle()->getX()));
                 $icon->appendChild($document->createElement('y', (string) $this->getIconStyle()->getY()));
 

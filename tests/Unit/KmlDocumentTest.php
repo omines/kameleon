@@ -21,9 +21,15 @@ class KmlDocumentTest extends TestCase
     public function testProperties(): void
     {
         $document = new KmlDocument('test.kml');
+        $document
+            ->setDescription('description-test')
+            ->setOpen(false)
+        ;
         $this->assertInstanceOf(KmlDocument::class, $document);
         $this->assertEquals('test.kml', $document->getName());
         $this->assertEquals('http://www.opengis.net/kml/2.2', $document->getXmlns());
+        $this->assertEquals('description-test', $document->getDescription());
+        $this->assertFalse($document->isOpen());
 
         $document->setName('test2.kml');
         $this->assertEquals('test2.kml', $document->getName());

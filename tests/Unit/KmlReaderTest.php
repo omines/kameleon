@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use Omines\Kameleon\Exception\FileIsDirectoryException;
+use Omines\Kameleon\Exception\FileNotFoundException;
 use Omines\Kameleon\Exception\InvalidArchiveException;
 use Omines\Kameleon\Exception\InvalidFileException;
 use Omines\Kameleon\Model\KmlDocument;
@@ -26,7 +28,7 @@ class KmlReaderTest extends TestCase
     {
         $reader = new KmlReader();
 
-        $this->expectException(InvalidFileException::class);
+        $this->expectException(FileNotFoundException::class);
         $reader->readFromFile(__DIR__ . '/does_not_exist.kml');
     }
 
@@ -34,7 +36,7 @@ class KmlReaderTest extends TestCase
     {
         $reader = new KmlReader();
 
-        $this->expectException(InvalidFileException::class);
+        $this->expectException(FileIsDirectoryException::class);
         $reader->readFromFile(__DIR__);
     }
 
@@ -51,7 +53,7 @@ class KmlReaderTest extends TestCase
         $reader = new KmlReader();
 
         $this->expectException(InvalidFileException::class);
-        $reader->readFromFile(__DIR__ . '/../Data/empty.kml');
+        $reader->readFromFile(__DIR__ . '/../Data/empty.kmz');
     }
 
     public function testReadKmlFileInvalidFailure(): void
@@ -84,6 +86,11 @@ class KmlReaderTest extends TestCase
         $document = $reader->readFromFile(__DIR__ . '/../Data/valid.kml');
 
         $this->assertInstanceOf(KmlDocument::class, $document);
+        $this->assertEquals('http://www.opengis.net/kml/2.1', $document->getXmlns());
+        $this->assertEquals('KML Samples', $document->getName());
+        $this->assertEquals('Unleash your creativity with the help of these examples!', $document->getDescription());
+        $this->assertFalse($document->isOpen());
+        $this->assertNotEmpty($document->getNodes());
     }
 
     public function testReadKmzFileSuccess(): void
@@ -92,5 +99,15 @@ class KmlReaderTest extends TestCase
         $document = $reader->readFromFile(__DIR__ . '/../Data/valid.kmz');
 
         $this->assertInstanceOf(KmlDocument::class, $document);
+    }
+
+    public function testKmlWithoutXmlns(): void
+    {
+        $reader = new KmlReader();
+        $document = $reader->readFromFile(__DIR__ . '/../Data/no_xmlns.kml');
+
+        $this->assertInstanceOf(KmlDocument::class, $document);
+        $this->assertEquals('http://www.opengis.net/kml/2.2', $document->getXmlns());
+        $this->assertTrue($document->isOpen());
     }
 }

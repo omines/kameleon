@@ -119,4 +119,20 @@ class Polygon
     {
         return implode("\n", array_map(fn (Coordinate $coordinate) => $coordinate->toString(), $this->coordinates));
     }
+
+    public static function buildFromLinearRing(\SimpleXMLElement $ring): Polygon
+    {
+        $polygon = (new self())
+            ->setExtrude(isset($ring->extrude) && ((string) $ring->extrude))
+            ->setTessellate(isset($ring->tessellate) && ((string) $ring->tessellate))
+        ;
+        if (isset($ring->altitudeMode)) {
+            $polygon->setAltitudeModeFromString((string) $ring->altitudeMode);
+        }
+        if (isset($ring->coordinates)) {
+            $polygon->setCoordinatesFromString((string) $ring->coordinates);
+        }
+
+        return $polygon;
+    }
 }

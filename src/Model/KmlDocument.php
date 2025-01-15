@@ -19,6 +19,10 @@ class KmlDocument
     /** @var string */
     private const KML_XMLNS = 'http://www.opengis.net/kml/2.2';
 
+    private ?string $description = null;
+
+    private bool $open = true;
+
     /** @var array<int, KmlNode> */
     private array $nodes = [];
 
@@ -34,6 +38,30 @@ class KmlDocument
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->open;
+    }
+
+    public function setOpen(bool $open): static
+    {
+        $this->open = $open;
 
         return $this;
     }

@@ -29,7 +29,9 @@ class KmlWriterTest extends TestCase
         $this->assertInstanceOf(KmlDocument::class, $document);
 
         $output = $writer->writeKml($document);
-        $this->assertStringContainsString('<kml xmlns="http://www.opengis.net/kml/2.2">', $output);
+        $this->assertStringContainsStringIgnoringCase('<kml xmlns="http://www.opengis.net/kml/2.1">', $output);
+        $this->assertStringContainsStringIgnoringCase('<Document>', $output);
+        $this->assertStringContainsStringIgnoringCase('<Style id="downArrowIcon">', $output);
 
         $output = $writer->writeKmz($document);
         $this->assertStringStartsWith('PK', $output);
@@ -46,7 +48,7 @@ class KmlWriterTest extends TestCase
         ob_start();
         $writer->streamKml($document);
         $output = (string) ob_get_clean();
-        $this->assertStringContainsString('<kml xmlns="http://www.opengis.net/kml/2.2">', $output);
+        $this->assertStringContainsStringIgnoringCase('<kml xmlns="http://www.opengis.net/kml/2.1">', $output);
 
         ob_start();
         $writer->streamKmz($document);

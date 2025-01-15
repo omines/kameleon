@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Omines\Kameleon\Reader;
 
+use Omines\Kameleon\Exception\FileIsDirectoryException;
+use Omines\Kameleon\Exception\FileNotFoundException;
 use Omines\Kameleon\Exception\InvalidArchiveException;
 use Omines\Kameleon\Exception\InvalidFileException;
 use Omines\Kameleon\Model\KmlDocument;
@@ -23,52 +25,48 @@ class KmlReader
     /**
      * @throws InvalidFileException     If the file does not exist or is not a valid KML file
      * @throws InvalidArchiveException  If an archive is provided, but it does not contain a KML file named "doc.kml"
-     * @throws \ErrorException      If the reader itself fails catastrophically
      */
     public function readFromFile(string $fileName): ?KmlDocument
     {
-        //        if (!file_exists($fileName) || !is_file($fileName)) {
-        //            throw new InvalidFileException(sprintf('Invalid file "%s" provided', $fileName));
-        //        }
-        //
+        if (!file_exists($fileName)) {
+            throw new FileNotFoundException(sprintf('File "%s" does not exist', $fileName));
+        }
+        if (is_dir($fileName)) {
+            throw new FileIsDirectoryException(sprintf('File "%s" is a directory', $fileName));
+        }
+
         $document = ErrorToExceptionTransformer::run(function () use ($fileName): ?string {
             $document = null;
             $zip = new \ZipArchive();
-            $openResult = null;
-            try {
-                $openResult = $zip->open($fileName);
+            $openResult = $zip->open($fileName);
 
-                if (\ZipArchive::ER_NOZIP === $openResult) {
-                    $document = file_get_contents($fileName);
-                } elseif (true === $openResult) {
-                    $document = $zip->getFromName('doc.kml');
+            if (\ZipArchive::ER_NOZIP === $openResult) {
+                $document = file_get_contents($fileName);
+            } elseif (true === $openResult) {
+                $document = $zip->getFromName('doc.kml');
+                $zip->close();
 
-                    if (false === $document) {
-                        throw new InvalidArchiveException(sprintf('No KML file found in KMZ archive "%s"', $fileName));
-                    }
-                }
-            } finally {
-                if (true === $openResult) {
-                    $zip->close();
+                if (false === $document) {
+                    throw new InvalidArchiveException(sprintf('No KML file found in KMZ archive "%s"', $fileName));
                 }
             }
 
             return $document ?: null;
         });
 
-        if (empty($document) || !is_string($document)) {
+        if (empty($document)) {
             throw new InvalidFileException('Empty KML/KMZ file provided');
         }
+        assert(is_string($document));
 
-        return $this->parseDocument(
-            $document,
-            (string) preg_replace('/\.[^.]*$/', '', pathinfo($fileName, PATHINFO_FILENAME)),
-        );
+        $cleanFileName = preg_replace('/\.[^.]*$/', '', pathinfo($fileName, PATHINFO_FILENAME));
+        assert(is_string($cleanFileName));
+
+        return $this->parseDocument($document, $cleanFileName);
     }
 
     /**
      * @throws InvalidFileException If the provided document is not a valid KML file
-     * @throws \ErrorException      If the reader itself fails catastrophically
      */
     public function readFromString(string $document, string $fileName): ?KmlDocument
     {
@@ -83,14 +81,25 @@ class KmlReader
                 $doc = new KmlDocument($fileName);
 
                 if (null !== ($namespace = $xml->getNamespaces()[''] ?? null)) {
-                    $doc->setXmlns((string) $namespace);
+                    assert(is_string($namespace));
+                    $doc->setXmlns($namespace);
                 }
 
                 foreach ($xml->Document->children() as $node) {
-                    if ('name' === $node->getName()) {
-                        $doc->setName((string) $node);
-                    } elseif ($node = KmlNode::fromSimpleXmlElement($node)) {
-                        $doc->addNode($node);
+                    switch ($node->getName()) {
+                        case 'name':
+                            $doc->setName((string) $node);
+                            break;
+                        case 'description':
+                            $doc->setDescription((string) $node);
+                            break;
+                        case 'open':
+                            $doc->setOpen('1' === (string) $node);
+                            break;
+                        default:
+                            if ($node = KmlNode::fromSimpleXmlElement($node)) {
+                                $doc->addNode($node);
+                            }
                     }
                 }
 
