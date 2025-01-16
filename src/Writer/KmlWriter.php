@@ -51,6 +51,7 @@ class KmlWriter
         $zipContent = file_get_contents($tempFile);
         assert(is_string($zipContent));
 
+        /* @infection-ignore-all */
         unlink($tempFile);
 
         return $zipContent;
@@ -71,7 +72,9 @@ class KmlWriter
         /** @var resource $output */
         $output = fopen('php://output', 'w');
 
+        /* @infection-ignore-all */
         header(sprintf('Content-Type: %s', $contentType));
+        /* @infection-ignore-all */
         header(sprintf('Content-Disposition: attachment; filename="%s"', $filename));
 
         fprintf($output, '%s', $content);

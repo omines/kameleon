@@ -44,6 +44,7 @@ class KmlReader
                 $document = file_get_contents($fileName);
             } elseif (true === $openResult) {
                 $document = $zip->getFromName('doc.kml');
+                /* @infection-ignore-all */
                 $zip->close();
 
                 if (false === $document) {
