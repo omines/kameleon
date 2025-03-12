@@ -45,8 +45,8 @@ class LineStyle
     public static function fromSimpleXmlElement(\SimpleXMLElement $node): ?self
     {
         $style = new self();
-        if (isset($node->Color)) {
-            $style->setColor((string) $node->Color);
+        if (isset($node->color)) {
+            $style->setColor((string) $node->color);
         }
 
         if (isset($node->width)) {

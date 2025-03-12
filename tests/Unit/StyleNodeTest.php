@@ -135,11 +135,11 @@ class StyleNodeTest extends TestCase
         </Icon>
     </IconStyle>
     <LabelStyle>
-        <Color>ff0000ff</Color>
+        <color>ff0000ff</color>
         <scale>2</scale>
     </LabelStyle>
     <LineStyle>
-        <Color>00ff00ff</Color>
+        <color>00ff00ff</color>
         <width>1</width>
     </LineStyle>
     <PolyStyle>
@@ -202,11 +202,11 @@ EOF
         $this->assertStringContainsStringIgnoringCase('<h>32</h>', $xml);
 
         $this->assertStringContainsStringIgnoringCase('<LabelStyle>', $xml);
-        $this->assertStringContainsStringIgnoringCase('<Color>ff0000ff</Color>', $xml);
+        $this->assertStringContainsStringIgnoringCase('<color>ff0000ff</color>', $xml);
         $this->assertStringContainsStringIgnoringCase('<scale>2</scale>', $xml);
 
         $this->assertStringContainsStringIgnoringCase('<LineStyle>', $xml);
-        $this->assertStringContainsStringIgnoringCase('<Color>00ff00ff</Color>', $xml);
+        $this->assertStringContainsStringIgnoringCase('<color>00ff00ff</color>', $xml);
         $this->assertStringContainsStringIgnoringCase('<width>1</width>', $xml);
 
         $this->assertStringContainsStringIgnoringCase('<PolyStyle>', $xml);
@@ -286,7 +286,7 @@ EOF
         $this->assertNotFalse($xml);
         $this->assertStringContainsStringIgnoringCase('<Style id="test">', $xml);
         $this->assertStringContainsStringIgnoringCase('<LabelStyle', $xml);
-        $this->assertStringNotContainsStringIgnoringCase('<Color>', $xml);
+        $this->assertStringNotContainsStringIgnoringCase('<color>', $xml);
         $this->assertStringContainsStringIgnoringCase('<scale>', $xml);
     }
 

@@ -46,8 +46,8 @@ class LabelStyle
     {
         $style = new self();
 
-        if (isset($node->Color)) {
-            $style->setColor((string) $node->Color);
+        if (isset($node->color)) {
+            $style->setColor((string) $node->color);
         }
         if (isset($node->scale)) {
             $style->setScale((int) $node->scale);

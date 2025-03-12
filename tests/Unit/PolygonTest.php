@@ -74,6 +74,18 @@ class PolygonTest extends TestCase
         $polygon->setCoordinatesFromString('1,2,3 4,5,6,7');
     }
 
+    public function testCreateFromFloatArray(): void
+    {
+        $polygon = new Polygon();
+        $polygon->setCoordinatesFromFloatArray([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+        $this->assertEquals([
+            new Coordinate(1, 2, 3),
+            new Coordinate(4, 5, 6),
+            new Coordinate(7, 8, 9),
+        ], $polygon->getCoordinates());
+        $this->assertEquals([[1, 2, 3], [4, 5, 6], [7, 8, 9]], $polygon->getCoordinatesAsFloatArray());
+    }
+
     public function testCreateFromLinearRing(): void
     {
         $polygon = Polygon::buildFromLinearRing(new SimpleXMLElement(<<<EOT

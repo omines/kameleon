@@ -135,4 +135,18 @@ class Polygon
 
         return $polygon;
     }
+
+    /** @param array<array<int, float>> $coordinates */
+    public function setCoordinatesFromFloatArray(array $coordinates): static
+    {
+        $this->coordinates = array_map(fn (array $coordinate) => new Coordinate($coordinate[0], $coordinate[1], $coordinate[2] ?? 0), $coordinates);
+
+        return $this;
+    }
+
+    /** @return array<array<int, float>> */
+    public function getCoordinatesAsFloatArray(): array
+    {
+        return array_map(fn (Coordinate $coordinate) => [$coordinate->getLatitude(), $coordinate->getLongitude(), $coordinate->getAltitude()], $this->coordinates);
+    }
 }

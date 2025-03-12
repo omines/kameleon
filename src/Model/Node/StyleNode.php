@@ -159,7 +159,7 @@ class StyleNode extends KmlNode
             $styleElement->appendChild($labelStyle);
 
             if (null !== $this->getLabelStyle()->getColor()) {
-                $labelStyle->appendChild($document->createElement('Color', $this->getLabelStyle()->getColor()));
+                $labelStyle->appendChild($document->createElement('color', $this->getLabelStyle()->getColor()));
             }
             if (null !== $this->getLabelStyle()->getScale()) {
                 $labelStyle->appendChild($document->createElement('scale', (string) $this->getLabelStyle()->getScale()));
@@ -171,7 +171,7 @@ class StyleNode extends KmlNode
             $styleElement->appendChild($lineStyle);
 
             if (null !== $this->getLineStyle()->getColor()) {
-                $lineStyle->appendChild($document->createElement('Color', $this->getLineStyle()->getColor()));
+                $lineStyle->appendChild($document->createElement('color', $this->getLineStyle()->getColor()));
             }
             if (null !== $this->getLineStyle()->getWidth()) {
                 $lineStyle->appendChild($document->createElement('Width', (string) $this->getLineStyle()->getWidth()));
@@ -183,7 +183,7 @@ class StyleNode extends KmlNode
             $styleElement->appendChild($polyStyle);
 
             if (null !== $this->getPolyStyle()->getColor()) {
-                $polyStyle->appendChild($document->createElement('Color', $this->getPolyStyle()->getColor()));
+                $polyStyle->appendChild($document->createElement('color', $this->getPolyStyle()->getColor()));
             }
             if (null !== $this->getPolyStyle()->getFill()) {
                 $polyStyle->appendChild($document->createElement('fill', (string) $this->getPolyStyle()->getFill()));
