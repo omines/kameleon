@@ -14,7 +14,7 @@ namespace Omines\Kameleon\Model;
 
 class Coordinate
 {
-    public function __construct(private float $latitude, private float $longitude, private float $altitude = 0)
+    public function __construct(private float $longitude, private float $latitude, private float $altitude = 0)
     {
     }
 

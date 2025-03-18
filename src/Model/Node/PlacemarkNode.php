@@ -184,7 +184,7 @@ class PlacemarkNode extends KmlNode
                     }
                     array_walk($coordinates, fn (&$value) => $value = (float) $value);
                     /** @var float[] $coordinates */
-                    $point = new Coordinate($coordinates[0], $coordinates[1], $coordinates[2] ?? 0);
+                    $point = new Coordinate($coordinates[1], $coordinates[0], $coordinates[2] ?? 0);
                     $placemarkNode->setPoint($point);
                     break;
                 case 'extendeddata':

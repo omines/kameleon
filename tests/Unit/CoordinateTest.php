@@ -20,8 +20,8 @@ class CoordinateTest extends TestCase
     public function testDefaults(): void
     {
         $coordinate = new Coordinate(1, 2, 3);
-        $this->assertEquals(1, $coordinate->getLatitude());
-        $this->assertEquals(2, $coordinate->getLongitude());
+        $this->assertEquals(1, $coordinate->getLongitude());
+        $this->assertEquals(2, $coordinate->getLatitude());
         $this->assertEquals(3, $coordinate->getAltitude());
     }
 
@@ -42,16 +42,16 @@ class CoordinateTest extends TestCase
     public function testCreateCoordinateFromStringWithTwoValues(): void
     {
         $coordinate = Coordinate::fromString('1,2');
-        $this->assertEquals(1, $coordinate->getLatitude());
-        $this->assertEquals(2, $coordinate->getLongitude());
+        $this->assertEquals(1, $coordinate->getLongitude());
+        $this->assertEquals(2, $coordinate->getLatitude());
         $this->assertEquals(0, $coordinate->getAltitude());
     }
 
     public function testCreateCoordinateFromStringWithThreeValues(): void
     {
         $coordinate = Coordinate::fromString('1,2,3');
-        $this->assertEquals(1, $coordinate->getLatitude());
-        $this->assertEquals(2, $coordinate->getLongitude());
+        $this->assertEquals(1, $coordinate->getLongitude());
+        $this->assertEquals(2, $coordinate->getLatitude());
         $this->assertEquals(3, $coordinate->getAltitude());
     }
 

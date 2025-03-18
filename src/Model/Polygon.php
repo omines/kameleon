@@ -147,6 +147,6 @@ class Polygon
     /** @return array<array<int, float>> */
     public function getCoordinatesAsFloatArray(): array
     {
-        return array_map(fn (Coordinate $coordinate) => [$coordinate->getLatitude(), $coordinate->getLongitude(), $coordinate->getAltitude()], $this->coordinates);
+        return array_map(fn (Coordinate $coordinate) => [$coordinate->getLongitude(), $coordinate->getLatitude(), $coordinate->getAltitude()], $this->coordinates);
     }
 }
