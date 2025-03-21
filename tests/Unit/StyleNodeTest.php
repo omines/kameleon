@@ -190,7 +190,7 @@ EOF
         $this->assertStringContainsStringIgnoringCase('<Style id="test">', $xml);
 
         $this->assertStringContainsStringIgnoringCase('<BalloonStyle>', $xml);
-        $this->assertStringContainsStringIgnoringCase('<text>test</text>', $xml);
+        $this->assertStringContainsStringIgnoringCase('<text><![CDATA[test]]></text>', $xml);
         $this->assertStringContainsStringIgnoringCase('<displayMode>hide</displayMode>', $xml);
 
         $this->assertStringContainsStringIgnoringCase('<IconStyle>', $xml);

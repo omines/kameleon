@@ -126,7 +126,9 @@ class StyleNode extends KmlNode
             $styleElement->appendChild($balloonStyle);
 
             if (null !== $this->getBalloonStyle()->getText()) {
-                $balloonStyle->appendChild($document->createElement('text', $this->getBalloonStyle()->getText()));
+                $textElement = $document->createElement('text');
+                $textElement->appendChild($document->createCDATASection($this->getBalloonStyle()->getText()));
+                $balloonStyle->appendChild($textElement);
             }
             if (null !== $this->getBalloonStyle()->getDisplayMode()) {
                 $balloonStyle->appendChild($document->createElement('displayMode', $this->getBalloonStyle()->getDisplayMode()->value));
