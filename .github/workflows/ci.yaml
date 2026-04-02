@@ -69,7 +69,7 @@ jobs:
         run: vendor/bin/phpunit --coverage-text --coverage-clover coverage.xml
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v6
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
