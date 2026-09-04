@@ -23,12 +23,12 @@
     "ext-zip": "*"
   },
   "require-dev": {
-    "ekino/phpstan-banned-code": "^v2.1.0",
+    "ekino/phpstan-banned-code": "^v3.0.0",
     "friendsofphp/php-cs-fixer": "^v3.65.0",
     "infection/infection": "^0.29.8",
     "phpstan/extension-installer": "^1.4.3",
-    "phpstan/phpstan": "^1.12.12",
-    "phpstan/phpstan-phpunit": "^1.4.1",
+    "phpstan/phpstan": "^2.0.0",
+    "phpstan/phpstan-phpunit": "^2.0.0",
     "phpunit/phpunit": "^11.4.4"
   },
   "conflict": {
