@@ -25,7 +25,7 @@
   "require-dev": {
     "ekino/phpstan-banned-code": "^v2.1.0",
     "friendsofphp/php-cs-fixer": "^v3.65.0",
-    "infection/infection": "^0.29.8",
+    "infection/infection": "^0.35.0",
     "phpstan/extension-installer": "^1.4.3",
     "phpstan/phpstan": "^1.12.12",
     "phpstan/phpstan-phpunit": "^1.4.1",
